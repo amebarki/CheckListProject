@@ -14,8 +14,16 @@ class ChecklistViewController: UITableViewController{
     
     
     var table = [ChecklistItem]()
-        
+    var documentDirectory: URL?
+    var dataFileUrl : URL?
+    
     override func viewDidLoad() {
+        
+        let fm = FileManager.default
+        documentDirectory = try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        print(documentDirectory?.absoluteString ?? "No Path")
+        dataFileUrl = documentDirectory?.appendingPathComponent("checklist").appendingPathExtension("json")
+        print(dataFileUrl?.absoluteString ?? "Path not created")
         let item0 = ChecklistItem(text:"Katakuri",checked:true)
         let item1 = ChecklistItem(text:"Doflamingo")
         let item2 = ChecklistItem(text:"Mihawk")
