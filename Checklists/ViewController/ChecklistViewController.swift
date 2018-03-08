@@ -81,23 +81,22 @@ class ChecklistViewController: UITableViewController{
 }
 
 // MARK: - AddItemViewControllerDelegate
-extension ChecklistViewController: AddItemViewControllerDelegate{
+extension ChecklistViewController: ItemDetailViewControllerDelegate{
     
     
-    func addItemViewControllerDidCancel(_ controller: AddItemViewController) {
+    func itemDetailViewControllerDidCancel(_ controller: ItemDetailViewController) {
         dismiss(animated: true)
     }
     
-    func addItemViewController(_ controller: AddItemViewController, didFinishAddingItem item: ChecklistItem) {
+    func itemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
         table.append(item)
         let indexPath:IndexPath = IndexPath(row:(table.count - 1), section:0)
         tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         dismiss(animated: true)
     }
     
-    func addItemViewController(_ controller: AddItemViewController, didFinishEditingItem item: ChecklistItem) {
+    func itemDetailViewController(_ controller: ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
         let index = table.index(where: { $0 === item})!
-        print(item.text)
         let indexPath:IndexPath = IndexPath(row:(index), section:0)
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         dismiss(animated: true)
@@ -107,13 +106,13 @@ extension ChecklistViewController: AddItemViewControllerDelegate{
         if let identifier = segue.identifier,
             identifier == "addItem",
             let navVC = segue.destination as? UINavigationController,
-            let destVC = navVC.topViewController as? AddItemViewController {
+            let destVC = navVC.topViewController as? ItemDetailViewController {
             destVC.delegate = self
         }
         if let identifier = segue.identifier,
             identifier == "editItem",
             let navVC = segue.destination as? UINavigationController,
-            let destVC = navVC.topViewController as? AddItemViewController
+            let destVC = navVC.topViewController as? ItemDetailViewController
         {
             destVC.delegate = self
             let index = tableView.indexPath(for: sender as! ChecklistItemCell)!
