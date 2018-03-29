@@ -22,9 +22,17 @@ class AllListViewController: UITableViewController {
         table.append(itemA)
         table.append(itemB)
         table.append(itemC)
-        
         let item1 = Checklist(text:"One Piece",paramItems : table)
-        let item2 = Checklist(text:"Final Fantasy")
+        table.removeAll()
+        for index in 1...5 {
+            table.append(ChecklistItem(text:"Final Fantasy  \(index)"))
+        }
+        let item2 = Checklist(text:"Final Fantasy",paramItems: table)
+        
+        table.removeAll()
+        for index in 1...5 {
+            table.append(ChecklistItem(text:"Saga  \(index)"))
+        }
         let item3 = Checklist(text:"Elements")
         lists.append(item1)
         lists.append(item2)
@@ -52,4 +60,51 @@ class AllListViewController: UITableViewController {
         lists.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
     }
+    
+    
+    
+    
+}
+
+extension AllListViewController: ListDetailViewControllerDelegate{
+    func listDetailViewControllerDidCancel(_ controller: ListDetailViewController) {
+        dismiss(animated: true)
+    }
+    
+    func listDetailViewController(_ controller: ListDetailViewController, didFinishAddingList list: Checklist) {
+        lists.append(list)
+        let indexPath:IndexPath = IndexPath(row:(lists.count - 1), section:0)
+        tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        // saveChecklistItems()
+        dismiss(animated: true)
+    }
+    
+    func listDetailViewController(_ controller: ListDetailViewController, didFinishEditingList list: Checklist) {
+        dismiss(animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier,
+            identifier == "showList",
+            let destVC = segue.destination as? ChecklistViewController{
+            let index = tableView.indexPath(for: sender as! UITableViewCell)!
+            destVC.list = lists[index.row]
+        }
+        if let identifier = segue.identifier,
+            identifier == "addList",
+            let navVC = segue.destination as? UINavigationController,
+            let destVC = navVC.topViewController as? ListDetailViewController {
+            destVC.delegate = self
+        }
+      /*  if let identifier = segue.identifier,
+            identifier == "editItem",
+            let navVC = segue.destination as? UINavigationController,
+            let destVC = navVC.topViewController as? ItemDetailViewController
+        {
+            destVC.delegate = self
+            let index = tableView.indexPath(for: sender as! ChecklistItemCell)!
+            destVC.itemtoEdit = table[index.row]
+        }*/
+}
+
 }
