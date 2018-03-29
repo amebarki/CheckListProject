@@ -9,7 +9,7 @@
 import Foundation
 
 
-class ChecklistItem
+class ChecklistItem : Codable
 {
     var text: String
     var checked: Bool = false

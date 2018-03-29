@@ -29,6 +29,7 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     }
 
     @IBAction func validateText(_ sender: Any) {
+        
     }
     
     @IBAction func cancel(_ sender: Any) {

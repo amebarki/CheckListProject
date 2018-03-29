@@ -14,29 +14,41 @@ class ChecklistViewController: UITableViewController{
     
     
     var table = [ChecklistItem]()
-    var documentDirectory: URL?
-    var dataFileUrl : URL?
+    
+    var documentDirectory: URL {
+        let fm = FileManager.default
+        return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+    }
+    
+    var dataFileUrl : URL {
+        return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
+    }
     
     override func viewDidLoad() {
         
-        let fm = FileManager.default
-        documentDirectory = try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        print(documentDirectory?.absoluteString ?? "No Path")
-        dataFileUrl = documentDirectory?.appendingPathComponent("checklist").appendingPathExtension("json")
-        print(dataFileUrl?.absoluteString ?? "Path not created")
-        let item0 = ChecklistItem(text:"Katakuri",checked:true)
+        print(documentDirectory.absoluteString)
+        
+        print(dataFileUrl.absoluteString)
+        print(dataFileUrl.path)
+        if(FileManager.default.fileExists(atPath: dataFileUrl.path))
+        {
+            loadChecklistItems()
+        }
+        
+      /*  let item0 = ChecklistItem(text:"Katakuri",checked:true)
         let item1 = ChecklistItem(text:"Doflamingo")
         let item2 = ChecklistItem(text:"Mihawk")
         let item3 = ChecklistItem(text:"Pedro",checked:true)
         let item4 = ChecklistItem(text:"Marco",checked:true)
         let item5 = ChecklistItem(text:"Kaku",checked:true)
-        
-        table.append(item0)
+       */
+       /* table.append(item0)
         table.append(item1)
         table.append(item2)
         table.append(item3)
         table.append(item4)
-        table.append(item5)
+        table.append(item5)*/
+
     }
     
 
@@ -86,6 +98,27 @@ class ChecklistViewController: UITableViewController{
         //cell.textLabel?.text = item.text
         cellItem?.labelText.text = item.text
     }
+    
+    func saveChecklistItems()
+    {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(table)
+        try! data.write(to: dataFileUrl)
+        //print(String(data: data, encoding: .utf8)!)
+    }
+    
+    func loadChecklistItems()
+    {
+        let jsonData = try! Data(contentsOf: dataFileUrl, options: .alwaysMapped)
+        let decoder = JSONDecoder()
+        let onePiece = try! decoder.decode([ChecklistItem].self, from: jsonData)
+        for character in onePiece {
+            table.append(character)
+        }
+    }
+    
+    
 }
 
 // MARK: - AddItemViewControllerDelegate
@@ -100,6 +133,7 @@ extension ChecklistViewController: ItemDetailViewControllerDelegate{
         table.append(item)
         let indexPath:IndexPath = IndexPath(row:(table.count - 1), section:0)
         tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        saveChecklistItems()
         dismiss(animated: true)
     }
     
@@ -107,6 +141,7 @@ extension ChecklistViewController: ItemDetailViewControllerDelegate{
         let index = table.index(where: { $0 === item})!
         let indexPath:IndexPath = IndexPath(row:(index), section:0)
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        saveChecklistItems()
         dismiss(animated: true)
     }
     
@@ -128,6 +163,8 @@ extension ChecklistViewController: ItemDetailViewControllerDelegate{
         }
         
     }
+    
+   
     
     
 }
