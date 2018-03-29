@@ -102,27 +102,6 @@ class ChecklistViewController: UITableViewController{
         //cell.textLabel?.text = item.text
         cellItem?.labelText.text = item.text
     }
-    
-    func saveChecklistItems()
-    {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let data = try! encoder.encode(list.items)
-        try! data.write(to: dataFileUrl)
-        //print(String(data: data, encoding: .utf8)!)
-    }
-    
-    func loadChecklistItems()
-    {
-        let jsonData = try! Data(contentsOf: dataFileUrl, options: .alwaysMapped)
-        let decoder = JSONDecoder()
-        let onePiece = try! decoder.decode([ChecklistItem].self, from: jsonData)
-        for character in onePiece {
-            list.items.append(character)
-        }
-    }
-    
-    
 }
 
 // MARK: - AddItemViewControllerDelegate

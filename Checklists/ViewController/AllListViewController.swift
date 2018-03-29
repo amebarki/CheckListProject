@@ -13,10 +13,17 @@ class AllListViewController: UITableViewController {
     var lists = [Checklist]()
     var table = [ChecklistItem]()
 
+    
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let itemA = ChecklistItem(text:"katakuri")
+        if(FileManager.default.fileExists(atPath: DataModel.instance.dataFileUrl.path))
+        {
+          lists = DataModel.instance.loadChecklist()
+        }
+      /*  let itemA = ChecklistItem(text:"katakuri")
         let itemB = ChecklistItem(text:"Doflamingo")
         let itemC = ChecklistItem(text:"Mihawk")
         table.append(itemA)
@@ -36,7 +43,7 @@ class AllListViewController: UITableViewController {
         let item3 = Checklist(text:"Elements")
         lists.append(item1)
         lists.append(item2)
-        lists.append(item3)
+        lists.append(item3)*/
      
         
     }
@@ -62,7 +69,7 @@ class AllListViewController: UITableViewController {
     }
     
     
-    
+   
     
 }
 
@@ -75,11 +82,15 @@ extension AllListViewController: ListDetailViewControllerDelegate{
         lists.append(list)
         let indexPath:IndexPath = IndexPath(row:(lists.count - 1), section:0)
         tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-        // saveChecklistItems()
+        //saveChecklist()
         dismiss(animated: true)
     }
     
     func listDetailViewController(_ controller: ListDetailViewController, didFinishEditingList list: Checklist) {
+        let index = lists.index(where: { $0 === list})!
+        let indexPath:IndexPath = IndexPath(row:(index), section:0)
+        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        //saveChecklist()
         dismiss(animated: true)
     }
     
@@ -93,18 +104,19 @@ extension AllListViewController: ListDetailViewControllerDelegate{
         if let identifier = segue.identifier,
             identifier == "addList",
             let navVC = segue.destination as? UINavigationController,
-            let destVC = navVC.topViewController as? ListDetailViewController {
-            destVC.delegate = self
-        }
-      /*  if let identifier = segue.identifier,
-            identifier == "editItem",
-            let navVC = segue.destination as? UINavigationController,
-            let destVC = navVC.topViewController as? ItemDetailViewController
+            let destVC = navVC.topViewController as? ListDetailViewController
         {
             destVC.delegate = self
-            let index = tableView.indexPath(for: sender as! ChecklistItemCell)!
-            destVC.itemtoEdit = table[index.row]
-        }*/
+        }
+        if let identifier = segue.identifier,
+            identifier == "editList",
+            let navVC = segue.destination as? UINavigationController,
+            let destVC = navVC.topViewController as? ListDetailViewController
+        {
+            destVC.delegate = self
+            let index = tableView.indexPath(for: sender as! UITableViewCell)!
+            destVC.listToEdit = lists[index.row]
+        }
 }
 
 }
