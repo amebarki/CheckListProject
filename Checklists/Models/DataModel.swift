@@ -11,7 +11,7 @@ import Foundation
 class DataModel {
     
     var lists = [Checklist]()
-
+    
     static let instance = DataModel()
     
     
@@ -29,6 +29,7 @@ class DataModel {
     
     init()
     {
+        UserDefaults.standard.register(defaults: ["firstLaunch":true])
         NotificationCenter.default.addObserver(self, selector: #selector(saveChecklist), name: .UIApplicationDidEnterBackground, object: nil)
     }
     

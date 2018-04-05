@@ -8,7 +8,8 @@
 import UIKit
 import Foundation
 
-enum IconAsset : String,Codable {
+enum IconAsset : String,Codable
+{
     case Appointments
     case Birthdays
     case Chores
@@ -25,4 +26,11 @@ enum IconAsset : String,Codable {
     var image : UIImage {
         return UIImage(named: self.rawValue)!
     }
+}
+
+
+enum StandardString : String,Codable
+{
+    case firstLaunch = "firstLaunch"
+    
 }

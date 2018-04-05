@@ -11,17 +11,29 @@ import UIKit
 class AllListViewController: UITableViewController {
 
     var table = [ChecklistItem]()
-    
     var dataModelInstance = DataModel.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(FileManager.default.fileExists(atPath: dataModelInstance.dataFileUrl.path))
+        if((UserDefaults.standard.bool(forKey: StandardString.firstLaunch.rawValue)))
         {
-          dataModelInstance.loadChecklist()
-          dataModelInstance.sortChecklists()
+            UserDefaults.standard.set(false, forKey: StandardString.firstLaunch.rawValue)
+            let starterList = Checklist(paramText: "List")
+            starterList.items.append(ChecklistItem(text: "Edit your first item"))
+            starterList.items.append(ChecklistItem(text: "Swipe me to delete"))
+            dataModelInstance.lists.append(starterList)
         }
+        else
+        {
+            if(FileManager.default.fileExists(atPath: dataModelInstance.dataFileUrl.path))
+            {
+                dataModelInstance.loadChecklist()
+                dataModelInstance.sortChecklists()
+            }
+        }
+        
+        
       /*  let itemA = ChecklistItem(text:"katakuri")
         let itemB = ChecklistItem(text:"Doflamingo")
         let itemC = ChecklistItem(text:"Mihawk")
