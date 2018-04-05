@@ -20,6 +20,7 @@
 		B8DD091420516C0400C687EA /* ChecklistItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DD091320516C0400C687EA /* ChecklistItemCell.swift */; };
 		B8E546E620761C6900C71D54 /* IconAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E546E520761C6900C71D54 /* IconAsset.swift */; };
 		B8E546E82076297D00C71D54 /* IconPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E546E72076297D00C71D54 /* IconPickerViewController.swift */; };
+		B8E546EB20766C1700C71D54 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8E546EA20766C1700C71D54 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		B8DD091320516C0400C687EA /* ChecklistItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemCell.swift; sourceTree = "<group>"; };
 		B8E546E520761C6900C71D54 /* IconAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconAsset.swift; sourceTree = "<group>"; };
 		B8E546E72076297D00C71D54 /* IconPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerViewController.swift; sourceTree = "<group>"; };
+		B8E546EA20766C1700C71D54 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8E546EB20766C1700C71D54 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +71,7 @@
 			children = (
 				B868791A2048542900D41D8A /* Checklists */,
 				B86879192048542900D41D8A /* Products */,
+				B8E546E920766C1600C71D54 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,6 +106,14 @@
 				B8E546E72076297D00C71D54 /* IconPickerViewController.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B8E546E920766C1600C71D54 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B8E546EA20766C1700C71D54 /* UserNotifications.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

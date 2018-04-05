@@ -20,6 +20,7 @@ class AllListViewController: UITableViewController {
         {
             UserDefaults.standard.set(false, forKey: StandardString.firstLaunch.rawValue)
             let starterList = Checklist(paramText: "List")
+            starterList.icon = IconAsset.Folder
             starterList.items.append(ChecklistItem(text: "Edit your first item"))
             starterList.items.append(ChecklistItem(text: "Swipe me to delete"))
             dataModelInstance.lists.append(starterList)
