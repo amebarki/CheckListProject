@@ -14,8 +14,6 @@ class AllListViewController: UITableViewController {
     
     var dataModelInstance = DataModel.instance
     
-  
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,6 +62,7 @@ class AllListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "listItem", for: indexPath)
         cell.textLabel?.text = dataModelInstance.lists[indexPath.row].text
         cell.detailTextLabel?.text = determineStateChecklist(index: indexPath.row)
+        cell.imageView?.image = dataModelInstance.lists[indexPath.row].icon.image
         return cell
     }
     
@@ -134,7 +133,8 @@ extension AllListViewController: ListDetailViewControllerDelegate{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier,
             identifier == "showList",
-            let destVC = segue.destination as? ChecklistViewController{
+            let destVC = segue.destination as? ChecklistViewController
+        {
             let index = tableView.indexPath(for: sender as! UITableViewCell)!
             destVC.list = dataModelInstance.lists[index.row]
         }
@@ -154,6 +154,6 @@ extension AllListViewController: ListDetailViewControllerDelegate{
             let index = tableView.indexPath(for: sender as! UITableViewCell)!
             destVC.listToEdit = dataModelInstance.lists[index.row]
         }
-}
+    }
 
 }
