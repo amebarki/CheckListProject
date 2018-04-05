@@ -22,6 +22,7 @@ class AllListViewController: UITableViewController {
         if(FileManager.default.fileExists(atPath: dataModelInstance.dataFileUrl.path))
         {
           dataModelInstance.loadChecklist()
+          dataModelInstance.sortChecklists()
         }
       /*  let itemA = ChecklistItem(text:"katakuri")
         let itemB = ChecklistItem(text:"Doflamingo")
@@ -77,7 +78,16 @@ class AllListViewController: UITableViewController {
     
     func determineStateChecklist(index: Int) -> String
     {
-        if dataModelInstance.lists[index].items.count == 0
+        switch (dataModelInstance.lists[index].items.count,dataModelInstance.lists[index].uncheckedItemsCount) {
+        case (0, _):
+            return "No Item"
+        case (_,0):
+            return "All Done !"
+        default:
+            return "Number of unchecked items : \(dataModelInstance.lists[index].uncheckedItemsCount)"
+        }
+        
+       /* if dataModelInstance.lists[index].items.count == 0
         {
             return "No Item"
         }
@@ -89,7 +99,7 @@ class AllListViewController: UITableViewController {
             default:
                 return "Number of unchecked items : \(dataModelInstance.lists[index].uncheckedItemsCount)"
             }
-        }
+        }*/
     }
    
     
@@ -103,17 +113,21 @@ extension AllListViewController: ListDetailViewControllerDelegate{
     
     func listDetailViewController(_ controller: ListDetailViewController, didFinishAddingList list: Checklist) {
         dataModelInstance.lists.append(list)
-        let indexPath:IndexPath = IndexPath(row:(dataModelInstance.lists.count - 1), section:0)
-        tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        dataModelInstance.sortChecklists()
+        //let indexPath:IndexPath = IndexPath(row:(dataModelInstance.lists.count - 1), section:0)
+        //tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         //DataModel.instance.saveChecklist()
+        tableView.reloadData()
         dismiss(animated: true)
     }
     
     func listDetailViewController(_ controller: ListDetailViewController, didFinishEditingList list: Checklist) {
-        let index = dataModelInstance.lists.index(where: { $0 === list})!
-        let indexPath:IndexPath = IndexPath(row:(index), section:0)
-        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        //let index = dataModelInstance.lists.index(where: { $0 === list})!
+        //let indexPath:IndexPath = IndexPath(row:(index), section:0)
+        //tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         //DataModel.instance.saveChecklist()
+        dataModelInstance.sortChecklists()
+        tableView.reloadData()
         dismiss(animated: true)
     }
     

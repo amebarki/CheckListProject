@@ -15,12 +15,14 @@ class DataModel {
     static let instance = DataModel()
     
     
-    var documentDirectory: URL {
+    var documentDirectory: URL
+    {
         let fm = FileManager.default
         return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
     }
     
-    var dataFileUrl : URL {
+    var dataFileUrl : URL
+    {
         return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
     }
     
@@ -31,7 +33,10 @@ class DataModel {
     }
     
     
-    
+    func sortChecklists()
+    {
+        lists.sort { (checklist1,checklist2)-> Bool in return checklist1.text.localizedStandardCompare(checklist2.text) ==  .orderedAscending }
+    }
         
     @objc func saveChecklist()
     {
