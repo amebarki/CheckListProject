@@ -38,7 +38,7 @@
                                                 <constraint firstAttribute="width" constant="23" id="Ira-bh-7SP"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.52156862745098043" green="0.023529411764705882" blue="0.023529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -393,4 +393,5 @@
         <segue reference="EWJ-EP-zeg"/>
         <segue reference="qdJ-qx-Atg"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" red="0.52156862745098043" green="0.023529411764705882" blue="0.023529411764705882" alpha="1" colorSpace="calibratedRGB"/>
 </document>
