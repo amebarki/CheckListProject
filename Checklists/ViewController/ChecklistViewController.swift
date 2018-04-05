@@ -15,14 +15,14 @@ class ChecklistViewController: UITableViewController{
     
     var table = [ChecklistItem]()
     var list: Checklist!
-    var documentDirectory: URL {
+   /* var documentDirectory: URL {
         let fm = FileManager.default
         return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
     }
     
     var dataFileUrl : URL {
         return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
-    }
+    }*/
     
     override func viewDidLoad() {
         
@@ -30,11 +30,11 @@ class ChecklistViewController: UITableViewController{
         self.title = list.text
         
         
-        print(documentDirectory.absoluteString)
+       /* print(documentDirectory.absoluteString)
         
         print(dataFileUrl.absoluteString)
         print(dataFileUrl.path)
-        /*if(FileManager.default.fileExists(atPath: dataFileUrl.path))
+        *//*if(FileManager.default.fileExists(atPath: dataFileUrl.path))
         {
             loadChecklistItems()
         }*/

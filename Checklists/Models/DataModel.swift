@@ -10,8 +10,11 @@ import Foundation
 
 class DataModel {
     
+    var lists = [Checklist]()
+
     static let instance = DataModel()
-    var list: Checklist!
+    
+    
     var documentDirectory: URL {
         let fm = FileManager.default
         return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
@@ -21,8 +24,16 @@ class DataModel {
         return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
     }
     
+    
+    init()
+    {
+        NotificationCenter.default.addObserver(self, selector: #selector(saveChecklist), name: .UIApplicationDidEnterBackground, object: nil)
+    }
+    
+    
+    
         
-    func saveChecklist(lists: [Checklist])
+    @objc func saveChecklist()
     {
         
         let encoder = JSONEncoder()
@@ -32,16 +43,14 @@ class DataModel {
         //print(String(data: data, encoding: .utf8)!)
     }
     
-    func loadChecklist() -> [Checklist]
+    func loadChecklist()
     {
-        var lists = [Checklist]()
         let jsonData = try! Data(contentsOf: dataFileUrl, options: .alwaysMapped)
         let decoder = JSONDecoder()
         let data = try! decoder.decode([Checklist].self, from: jsonData)
         for checklist in data {
             lists.append(checklist)
         }
-        return lists
     }
     
 }

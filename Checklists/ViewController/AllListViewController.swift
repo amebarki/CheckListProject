@@ -10,18 +10,18 @@ import UIKit
 
 class AllListViewController: UITableViewController {
 
-    var lists = [Checklist]()
     var table = [ChecklistItem]()
-
+    
+    var dataModelInstance = DataModel.instance
     
   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(FileManager.default.fileExists(atPath: DataModel.instance.dataFileUrl.path))
+        if(FileManager.default.fileExists(atPath: dataModelInstance.dataFileUrl.path))
         {
-          lists = DataModel.instance.loadChecklist()
+          dataModelInstance.loadChecklist()
         }
       /*  let itemA = ChecklistItem(text:"katakuri")
         let itemB = ChecklistItem(text:"Doflamingo")
@@ -47,15 +47,22 @@ class AllListViewController: UITableViewController {
      
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return lists.count
+        return dataModelInstance.lists.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "listItem", for: indexPath)
-        cell.textLabel?.text = lists[indexPath.row].text
+        cell.textLabel?.text = dataModelInstance.lists[indexPath.row].text
+        cell.detailTextLabel?.text = determineStateChecklist(index: indexPath.row)
         return cell
     }
     
@@ -64,33 +71,49 @@ class AllListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        lists.remove(at: indexPath.row)
+        dataModelInstance.lists.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
     }
     
-    
+    func determineStateChecklist(index: Int) -> String
+    {
+        if dataModelInstance.lists[index].items.count == 0
+        {
+            return "No Item"
+        }
+        else
+        {
+            switch dataModelInstance.lists[index].uncheckedItemsCount {
+            case 0:
+                return "All Done !"
+            default:
+                return "Number of unchecked items : \(dataModelInstance.lists[index].uncheckedItemsCount)"
+            }
+        }
+    }
    
     
 }
 
 extension AllListViewController: ListDetailViewControllerDelegate{
     func listDetailViewControllerDidCancel(_ controller: ListDetailViewController) {
+        tableView.reloadData()
         dismiss(animated: true)
     }
     
     func listDetailViewController(_ controller: ListDetailViewController, didFinishAddingList list: Checklist) {
-        lists.append(list)
-        let indexPath:IndexPath = IndexPath(row:(lists.count - 1), section:0)
+        dataModelInstance.lists.append(list)
+        let indexPath:IndexPath = IndexPath(row:(dataModelInstance.lists.count - 1), section:0)
         tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-        //saveChecklist()
+        //DataModel.instance.saveChecklist()
         dismiss(animated: true)
     }
     
     func listDetailViewController(_ controller: ListDetailViewController, didFinishEditingList list: Checklist) {
-        let index = lists.index(where: { $0 === list})!
+        let index = dataModelInstance.lists.index(where: { $0 === list})!
         let indexPath:IndexPath = IndexPath(row:(index), section:0)
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-        //saveChecklist()
+        //DataModel.instance.saveChecklist()
         dismiss(animated: true)
     }
     
@@ -99,7 +122,7 @@ extension AllListViewController: ListDetailViewControllerDelegate{
             identifier == "showList",
             let destVC = segue.destination as? ChecklistViewController{
             let index = tableView.indexPath(for: sender as! UITableViewCell)!
-            destVC.list = lists[index.row]
+            destVC.list = dataModelInstance.lists[index.row]
         }
         if let identifier = segue.identifier,
             identifier == "addList",
@@ -115,7 +138,7 @@ extension AllListViewController: ListDetailViewControllerDelegate{
         {
             destVC.delegate = self
             let index = tableView.indexPath(for: sender as! UITableViewCell)!
-            destVC.listToEdit = lists[index.row]
+            destVC.listToEdit = dataModelInstance.lists[index.row]
         }
 }
 
